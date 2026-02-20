@@ -1,0 +1,71 @@
+# ── Python ────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+.Python
+
+# ── Virtual Environment ───────────────────────────────
+venv/
+env/
+.venv/
+ENV/
+
+# ── Environment Variables ─────────────────────────────
+.env
+.env.local
+.env.production
+.env.development
+!.env.example
+
+# ── ML Models (too large for GitHub) ─────────────────
+models/*.pkl
+models/*.h5
+models/*.joblib
+*.pkl
+
+# ── Large Dataset ─────────────────────────────────────
+DATASET/creditcard.csv
+
+# ── Jupyter ───────────────────────────────────────────
+.ipynb_checkpoints/
+
+# ── Frontend ──────────────────────────────────────────
+frontend/node_modules/
+frontend/dist/
+frontend/.cache/
+node_modules/
+
+# ── IDE ───────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*~
+
+# ── OS ────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Logs ──────────────────────────────────────────────
+*.log
+logs/
+
+# ── Testing ───────────────────────────────────────────
+.coverage
+.pytest_cache/
+htmlcov/
+
+# ── CatBoost ──────────────────────────────────────────
+catboost_info/
+
+# ── Temp & Generated ──────────────────────────────────
+*.tmp
+*.temp
+generate_tree.py
+project_structure.txt
+test_fraud.json
+test_legitimate.json

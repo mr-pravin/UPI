@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 20% 3.5%;
+    --foreground: 210 40% 95%;
+    --card: 240 15% 8%;
+    --card-foreground: 210 40% 95%;
+    --popover: 240 15% 8%;
+    --popover-foreground: 210 40% 95%;
+    --primary: 190 100% 50%;
+    --primary-foreground: 240 20% 3.5%;
+    --secondary: 263 70% 55%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 240 10% 14%;
+    --muted-foreground: 215 20% 55%;
+    --accent: 263 70% 55%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --success: 142 76% 46%;
+    --success-foreground: 240 20% 3.5%;
+    --border: 240 10% 18%;
+    --input: 240 10% 18%;
+    --ring: 190 100% 50%;
+    --radius: 0.75rem;
+
+    --glow-blue: 190 100% 50%;
+    --glow-purple: 263 70% 55%;
+    --glow-red: 0 84% 60%;
+    --glow-green: 142 76% 46%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Orbitron', sans-serif;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply relative bg-card/40 backdrop-blur-xl border border-border/50 rounded-xl;
+    box-shadow: 
+      0 0 20px hsla(var(--glow-blue), 0.05),
+      inset 0 1px 0 hsla(var(--foreground), 0.05);
+  }
+  .glass-card-hover {
+    @apply glass-card transition-all duration-500;
+  }
+  .glass-card-hover:hover {
+    border-color: hsla(var(--primary), 0.4);
+    box-shadow: 
+      0 0 30px hsla(var(--glow-blue), 0.15),
+      0 0 60px hsla(var(--glow-purple), 0.05),
+      inset 0 1px 0 hsla(var(--foreground), 0.1);
+  }
+  .glow-text-blue {
+    @apply text-primary;
+    text-shadow: 0 0 20px hsla(var(--glow-blue), 0.5), 0 0 40px hsla(var(--glow-blue), 0.2);
+  }
+  .glow-text-purple {
+    @apply text-accent;
+    text-shadow: 0 0 20px hsla(var(--glow-purple), 0.5), 0 0 40px hsla(var(--glow-purple), 0.2);
+  }
+  .glow-border-blue {
+    border-color: hsla(var(--glow-blue), 0.5);
+    box-shadow: 0 0 15px hsla(var(--glow-blue), 0.2), inset 0 0 15px hsla(var(--glow-blue), 0.05);
+  }
+  .glow-border-red {
+    border-color: hsla(var(--glow-red), 0.5);
+    box-shadow: 0 0 15px hsla(var(--glow-red), 0.2), inset 0 0 15px hsla(var(--glow-red), 0.05);
+  }
+  .glow-border-green {
+    border-color: hsla(var(--glow-green), 0.5);
+    box-shadow: 0 0 15px hsla(var(--glow-green), 0.2), inset 0 0 15px hsla(var(--glow-green), 0.05);
+  }
+  .btn-primary-glow {
+    @apply bg-primary text-primary-foreground font-semibold px-8 py-3 rounded-lg transition-all duration-300;
+    box-shadow: 0 0 20px hsla(var(--glow-blue), 0.3);
+  }
+  .btn-primary-glow:hover {
+    box-shadow: 0 0 30px hsla(var(--glow-blue), 0.5), 0 0 60px hsla(var(--glow-blue), 0.2);
+    transform: translateY(-2px);
+  }
+  .btn-secondary-glow {
+    @apply border border-primary/50 text-primary font-semibold px-8 py-3 rounded-lg transition-all duration-300 bg-transparent;
+  }
+  .btn-secondary-glow:hover {
+    @apply bg-primary/10;
+    box-shadow: 0 0 20px hsla(var(--glow-blue), 0.2);
+    transform: translateY(-2px);
+  }
+  .mono-text {
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .section-padding {
+    @apply px-4 sm:px-6 lg:px-8 py-20 md:py-32;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+::-webkit-scrollbar-thumb {
+  background: hsla(var(--primary), 0.3);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsla(var(--primary), 0.5);
+}
+
+/* Custom cursor glow */
+.cursor-glow {
+  pointer-events: none;
+  position: fixed;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, hsla(var(--glow-blue), 0.06) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  transition: opacity 0.3s;
+}
