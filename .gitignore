@@ -21,12 +21,6 @@ ENV/
 .env.development
 !.env.example
 
-# ── ML Models (too large for GitHub) ─────────────────
-models/*.pkl
-models/*.h5
-models/*.joblib
-*.pkl
-
 # ── Large Dataset ─────────────────────────────────────
 DATASET/creditcard.csv
 
