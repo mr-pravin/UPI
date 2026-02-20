@@ -8,7 +8,7 @@ uvicorn[standard]==0.30.6
 # Data & ML
 numpy==1.26.4
 pandas==2.2.2
-scikit-learn==1.5.1
+scikit-learn==1.8.0
 lightgbm==4.5.0
 catboost==1.2.5
 joblib==1.4.2
