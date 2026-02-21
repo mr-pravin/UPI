@@ -3,7 +3,7 @@
  * Handles all communication with the FastAPI backend
  */
 
-const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000';
+const BASE_URL = import.meta.env.VITE_API_URL ?? 'https://upi-fraud-detection-api.onrender.com';
 
 // Feature names - must be in exact order for API mapping
 const FEATURE_NAMES = [
