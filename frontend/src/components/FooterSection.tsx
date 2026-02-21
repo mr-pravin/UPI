@@ -27,6 +27,9 @@ const FooterSection = () => {
               src="/pravin-photo.jpeg"
               alt="Pravin MR"
               className="w-24 h-24 rounded-full object-cover object-top border-2 border-cyan-400 shadow-lg shadow-cyan-400/30"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
             />
           </div>
 

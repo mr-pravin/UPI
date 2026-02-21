@@ -5,44 +5,36 @@ import { useInView } from "react-intersection-observer";
 const DocumentationSection = () => {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.2 });
 
-  const handleProjectLetterDownload = () => {
-    const link = document.createElement('a');
-    link.href = '/pravin-project-letter.pdf';
-    link.target = '_blank';
-    link.download = 'PRAVIN-PROJECT-LETTER.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  const handleNotebookDownload = () => {
-    const link = document.createElement('a');
-    link.href = '/UPI-FRAUD-DETECTION.ipynb';
-    link.download = 'UPI-FRAUD-DETECTION.ipynb';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  const handleReportOpen = () => {
-    window.open('/upi-fraud-detection-report.pdf', '_blank');
-  };
-
   const cards = [
     {
       icon: FileText,
       title: "Project Letter",
       label: "PRAVIN PROJECT LETTER.pdf",
-      onClick: () => {
-        const link = document.createElement('a');
-        link.href = '/pravin-project-letter.pdf';
-        link.download = 'PRAVIN-PROJECT-LETTER.pdf';
-        link.target = '_blank';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      },
-      content: <span className="text-xs text-primary font-display tracking-wider uppercase">DOWNLOAD PDF →</span>
+      content: (
+        <div className="flex gap-2 justify-center mt-auto">
+          <button
+            onClick={(e) => { e.stopPropagation(); window.open('/pravin-project-letter.pdf', '_blank'); }}
+            className="text-xs text-primary font-display tracking-wider uppercase transition-colors hover:text-primary/70"
+          >
+            VIEW →
+          </button>
+          <span className="text-primary/30">|</span>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              const a = document.createElement('a');
+              a.href = '/pravin-project-letter.pdf';
+              a.download = 'PRAVIN-PROJECT-LETTER.pdf';
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+            }}
+            className="text-xs text-primary font-display tracking-wider uppercase transition-colors hover:text-primary/70"
+          >
+            DOWNLOAD →
+          </button>
+        </div>
+      )
     },
     {
       icon: BookOpen,
@@ -54,18 +46,18 @@ const DocumentationSection = () => {
             onClick={(e) => { e.stopPropagation(); window.open('/UPI-FRAUD-DETECTION.html', '_blank'); }}
             className="text-xs text-primary font-display tracking-wider uppercase transition-colors hover:text-primary/70"
           >
-            VIEW NOTEBOOK →
+            VIEW →
           </button>
           <span className="text-primary/30">|</span>
           <button
             onClick={(e) => {
               e.stopPropagation();
-              const link = document.createElement('a');
-              link.href = '/UPI-FRAUD-DETECTION.ipynb';
-              link.download = 'UPI-FRAUD-DETECTION.ipynb';
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
+              const a = document.createElement('a');
+              a.href = '/UPI-FRAUD-DETECTION.ipynb';
+              a.download = 'UPI-FRAUD-DETECTION.ipynb';
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
             }}
             className="text-xs text-primary font-display tracking-wider uppercase transition-colors hover:text-primary/70"
           >
@@ -78,8 +70,31 @@ const DocumentationSection = () => {
       icon: FileText,
       title: "Project Report",
       label: "UPI-Fraud-Detection.pdf",
-      onClick: () => window.open('/upi-fraud-detection-report.pdf', '_blank'),
-      content: <span className="text-xs text-primary font-display tracking-wider uppercase">VIEW REPORT →</span>
+      content: (
+        <div className="flex gap-2 justify-center mt-auto">
+          <button
+            onClick={(e) => { e.stopPropagation(); window.open('/upi-fraud-detection-report.pdf', '_blank'); }}
+            className="text-xs text-primary font-display tracking-wider uppercase transition-colors hover:text-primary/70"
+          >
+            VIEW →
+          </button>
+          <span className="text-primary/30">|</span>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              const a = document.createElement('a');
+              a.href = '/upi-fraud-detection-report.pdf';
+              a.download = 'UPI-Fraud-Detection.pdf';
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+            }}
+            className="text-xs text-primary font-display tracking-wider uppercase transition-colors hover:text-primary/70"
+          >
+            DOWNLOAD →
+          </button>
+        </div>
+      )
     },
   ];
 
@@ -97,8 +112,7 @@ const DocumentationSection = () => {
           {cards.map((c, i) => (
             <motion.div
               key={c.title}
-              onClick={c.onClick}
-              className={`glass-card-hover p-6 text-center group block w-full flex flex-col ${c.onClick ? 'cursor-pointer' : ''}`}
+              className={`glass-card-hover p-6 text-center group block w-full flex flex-col`}
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: i * 0.15, duration: 0.6 }}

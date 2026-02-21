@@ -5,7 +5,7 @@ import asyncio
 from datetime import datetime
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, status, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import ValidationError
 import pandas as pd
@@ -82,6 +82,68 @@ async def health_check():
         "model_loaded": _pipeline is not None,
     }
 
+@app.post("/predict/csv")
+async def predict_csv(request: Request):
+    """Accept comma-separated values directly"""
+    try:
+        body = await request.body()
+        csv_string = body.decode('utf-8').strip()
+        
+        # Parse comma-separated values
+        values = [float(v.strip()) for v in csv_string.split(',')]
+        
+        if len(values) != 30:
+            raise HTTPException(
+                status_code=422,
+                detail=f"Expected 30 values, got {len(values)}"
+            )
+        
+        # Map to feature names (match uppercase as expected by utils)
+        # Wait, the prompt specified lowercase keys. I'll use exactly what they requested but will pass it to a DataFrame.
+        # However, earlier I found that the pipeline expects capitalized keys (Time, V1, V2, Amount).
+        # Actually, in their snippet, they gave lowercase. I will map them as requested:
+        feature_names = [
+            'time', 'v1', 'v2', 'v3', 'v4', 'v5', 'v6', 'v7',
+            'v8', 'v9', 'v10', 'v11', 'v12', 'v13', 'v14', 'v15',
+            'v16', 'v17', 'v18', 'v19', 'v20', 'v21', 'v22', 'v23',
+            'v24', 'v25', 'v26', 'v27', 'v28', 'amount'
+        ]
+        
+        features = dict(zip(feature_names, values))
+        
+        # Use existing prediction logic
+        import pandas as pd
+        # Map to uppercase keys since pipeline expects them:
+        df_features = {
+            'Time': features['time'],
+            'V1': features['v1'], 'V2': features['v2'], 'V3': features['v3'],
+            'V4': features['v4'], 'V5': features['v5'], 'V6': features['v6'],
+            'V7': features['v7'], 'V8': features['v8'], 'V9': features['v9'],
+            'V10': features['v10'], 'V11': features['v11'], 'V12': features['v12'],
+            'V13': features['v13'], 'V14': features['v14'], 'V15': features['v15'],
+            'V16': features['v16'], 'V17': features['v17'], 'V18': features['v18'],
+            'V19': features['v19'], 'V20': features['v20'], 'V21': features['v21'],
+            'V22': features['v22'], 'V23': features['v23'], 'V24': features['v24'],
+            'V25': features['v25'], 'V26': features['v26'], 'V27': features['v27'],
+            'V28': features['v28'], 'Amount': features['amount']
+        }
+        df = pd.DataFrame([df_features])
+        prediction = _pipeline.predict(df)[0]
+        probability = _pipeline.predict_proba(df)[0][1]
+        
+        risk_level = "HIGH" if probability > 0.7 else "MEDIUM" if probability > 0.3 else "LOW"
+        
+        return {
+            "is_fraud": bool(prediction),
+            "probability": float(probability),
+            "confidence": float(probability if prediction else 1 - probability),
+            "risk_level": risk_level,
+            "message": "Fraud detected" if prediction else "Transaction legitimate"
+        }
+        
+    except ValueError as e:
+        raise HTTPException(status_code=422, detail=f"Invalid values: {str(e)}")
+
 
 @app.post("/predict", response_model=PredictionResponse, tags=["Predictions"])
 async def predict_transaction(txn: TransactionFeatures):
@@ -116,11 +178,9 @@ async def predict_transaction(txn: TransactionFeatures):
 
     except Exception as e:
         logger.error(f"Prediction failed: {e}")
-        import traceback
-        trace_str = traceback.format_exc()
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Prediction failed: {e} | Trace: {trace_str}",
+            detail="Prediction failed",
         )
 
 

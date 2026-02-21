@@ -116,18 +116,24 @@ async function fetchAPI<T>(
  */
 export async function predictTransaction(features: number[]): Promise<PredictionResult> {
   if (features.length !== 30) {
-    throw new Error(`Invalid feature count: expected 30, got ${features.length}`);
+    throw new Error(`Expected 30 values, got ${features.length}`);
   }
 
-  const featureObject = mapFeaturesToObject(features);
+  // Send as comma-separated string to /predict/csv
+  const csvString = features.join(',');
 
-  console.log("Final request payload:", JSON.stringify(featureObject, null, 2));
-
-  const result = await fetchAPI<PredictionResult>('/predict', {
+  const response = await fetch(`${BASE_URL}/predict/csv`, {
     method: 'POST',
-    body: JSON.stringify(featureObject),
+    headers: { 'Content-Type': 'text/plain' },
+    body: csvString,
   });
-  return result;
+
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(`API Error ${response.status}: ${error}`);
+  }
+
+  return response.json();
 }
 
 /**
