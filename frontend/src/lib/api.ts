@@ -120,6 +120,9 @@ export async function predictTransaction(features: number[]): Promise<Prediction
   }
 
   const featureObject = mapFeaturesToObject(features);
+
+  console.log("Final request payload:", JSON.stringify(featureObject, null, 2));
+
   const result = await fetchAPI<PredictionResult>('/predict', {
     method: 'POST',
     body: JSON.stringify(featureObject),
@@ -141,9 +144,12 @@ export async function predictBatch(rows: number[][]): Promise<PredictionResult[]
       return mapFeaturesToObject(row);
     });
 
+    const bodyPayload = { transactions: mappedRows };
+    console.log("Final batch request payload:", JSON.stringify(bodyPayload, null, 2));
+
     const result = await fetchAPI<PredictionResult[]>('/predict/batch', {
       method: 'POST',
-      body: JSON.stringify({ rows: mappedRows }),
+      body: JSON.stringify(bodyPayload),
     });
     return result;
   } catch (error) {
