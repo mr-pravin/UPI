@@ -59,23 +59,23 @@ const PredictionEngine = forwardRef<PredictionRef>((_props, fRef) => {
     setResult(null);
 
     // Parse and validate input
-    const trimmed = input.trim();
+    const trimmed = input.trim().replace(/,+/g, ',');
     if (!trimmed) {
       setError('Please enter transaction values');
       setLoading(false);
       return;
     }
 
-    const values = trimmed.split(',').map(v => parseFloat(v.trim()));
-
-    if (values.length !== 30) {
-      setError(`Expected 30 values, got ${values.length}. Check your input.`);
+    const valueStrings = trimmed.split(',').map(s => s.trim()).filter(s => s !== '');
+    if (valueStrings.length !== 30) {
+      setError(`Expected 30 values, got ${valueStrings.length}. Check your input.`);
       setLoading(false);
       return;
     }
 
+    const values = valueStrings.map(v => Number(v));
     if (values.some(v => isNaN(v))) {
-      setError('All values must be numbers. Check for invalid characters.');
+      setError('All values must be valid numbers. Check for invalid characters.');
       setLoading(false);
       return;
     }
